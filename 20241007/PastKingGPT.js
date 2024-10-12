@@ -71,7 +71,7 @@ function ChucklePostAI(AI_option) {
       const title = document.title;
       
       try {
-        const response = await fetch('https://aizhaiyao.pastking.xyz/api/summary/?token=pastking', {
+        const response = await fetch('https://aizhaiyao.pastking.xyz/api/summary/?token=apastkingplus', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
