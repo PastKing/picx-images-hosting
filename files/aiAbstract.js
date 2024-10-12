@@ -3,9 +3,9 @@ console.log("\n %c Post-Abstract-AI 开源博客文章摘要AI生成工具 %c ht
 function ChucklePostAI(AI_option) {
   var aiExecuted = false;
 
-  function insertAIDiv(selector) {
+  function insertAIDiv() {
     removeExistingAIDiv();
-    const targetElement = document.querySelector(selector);
+    const targetElement = document.querySelector('#article-wrapper > section > #notion-article');
     if (!targetElement) return;
 
     const aiDiv = document.createElement('div');
@@ -100,7 +100,7 @@ function ChucklePostAI(AI_option) {
     getTitleAndContent: function() {
       try {
         const title = document.title;
-        const container = document.querySelector('#notion-article');
+        const container = document.querySelector('#article-wrapper > section > #notion-article');
         if (!container) {
           console.warn('ChucklePostAI：找不到文章容器。');
           return '';
@@ -128,93 +128,15 @@ function ChucklePostAI(AI_option) {
       }
     },
 
-    fetchAISummary: async function(content) {
-      const url = window.location.href;
-      const title = document.title;
-      
-      try {
-        const response = await fetch('https://aizhaiyao.pastking.xyz/api/summary/?token=apastkingplus', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            content: content
-          })
-        });
+    // fetchAISummary 和 aiShowAnimation 函数保持不变
 
-        if (response.ok) {
-          const data = await response.json();
-          return data.summary;
-        } else {
-          throw new Error('Response not ok');
-        }
-      } catch (error) {
-        console.error('ChucklePostAI：请求失败', error);
-        return '获取文章摘要失败，请稍后再试。';
-      }
-    },
+    // ...
 
-    aiShowAnimation: function(text) {
-      const element = document.querySelector(".ai-explanation");
-      if (!element) return;
-
-      if (aiExecuted) return;
-
-      aiExecuted = true;
-      const typingDelay = 25;
-      const punctuationDelayMultiplier = 6;
-
-      element.innerHTML = "生成中..." + '<span class="blinking-cursor"></span>';
-
-      let animationRunning = true;
-      let currentIndex = 0;
-      let lastUpdateTime = performance.now();
-
-      const animate = () => {
-        if (currentIndex < text.length && animationRunning) {
-          const currentTime = performance.now();
-          const timeDiff = currentTime - lastUpdateTime;
-
-          const letter = text.slice(currentIndex, currentIndex + 1);
-          const isPunctuation = /[，。！、？,.!?]/.test(letter);
-          const delay = isPunctuation ? typingDelay * punctuationDelayMultiplier : typingDelay;
-
-          if (timeDiff >= delay) {
-            element.innerText = text.slice(0, currentIndex + 1);
-            lastUpdateTime = currentTime;
-            currentIndex++;
-
-            if (currentIndex < text.length) {
-              element.innerHTML = text.slice(0, currentIndex) + '<span class="blinking-cursor"></span>';
-            } else {
-              element.innerHTML = text;
-              aiExecuted = false;
-              observer.disconnect();
-            }
-          }
-          requestAnimationFrame(animate);
-        }
-      }
-
-      const observer = new IntersectionObserver((entries) => {
-        let isVisible = entries[0].isIntersecting;
-        animationRunning = isVisible;
-        if (animationRunning && currentIndex === 0) {
-          setTimeout(() => {
-            requestAnimationFrame(animate);
-          }, 200);
-        }
-      }, { threshold: 0 });
-
-      let post_ai = document.querySelector('.post-ai');
-      observer.observe(post_ai);
-    },
   }
 
   function runChucklePostAI() {
     if (window.location.pathname.includes('posts')) {
-      insertAIDiv('#notion-article');
+      insertAIDiv();
       const content = chucklePostAI.getTitleAndContent();
       if (content) {
         console.log('ChucklePostAI本次提交的内容为：' + content);
