@@ -11,20 +11,82 @@ function ChucklePostAI(AI_option) {
     const aiDiv = document.createElement('div');
     aiDiv.className = 'post-ai';
     aiDiv.innerHTML = `
-      <div class="ai-title">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21px" height="21px" viewBox="0 0 48 48">
-          <title>机器人</title>
-          <g id="&#x673A;&#x5668;&#x4EBA;" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <path d="M34.717885,5.03561087 C36.12744,5.27055371 37.079755,6.60373651 36.84481,8.0132786 L35.7944,14.3153359 L38.375,14.3153359 C43.138415,14.3153359 47,18.1768855 47,22.9402569 L47,34.4401516 C47,39.203523 43.138415,43.0650727 38.375,43.0650727 L9.625,43.0650727 C4.861585,43.0650727 1,39.203523 1,34.4401516 L1,22.9402569 C1,18.1768855 4.861585,14.3153359 9.625,14.3153359 L12.2056,14.3153359 L11.15519,8.0132786 C10.920245,6.60373651 11.87256,5.27055371 13.282115,5.03561087 C14.69167,4.80066802 16.024865,5.7529743 16.25981,7.16251639 L17.40981,14.0624532 C17.423955,14.1470924 17.43373,14.2315017 17.43948,14.3153359 L30.56052,14.3153359 C30.56627,14.2313867 30.576045,14.1470924 30.59019,14.0624532 L31.74019,7.16251639 C31.975135,5.7529743 33.30833,4.80066802 34.717885,5.03561087 Z M38.375,19.4902885 L9.625,19.4902885 C7.719565,19.4902885 6.175,21.0348394 6.175,22.9402569 L6.175,34.4401516 C6.175,36.3455692 7.719565,37.89012 9.625,37.89012 L38.375,37.89012 C40.280435,37.89012 41.825,36.3455692 41.825,34.4401516 L41.825,22.9402569 C41.825,21.0348394 40.280435,19.4902885 38.375,19.4902885 Z M14.8575,23.802749 C16.28649,23.802749 17.445,24.9612484 17.445,26.3902253 L17.445,28.6902043 C17.445,30.1191812 16.28649,31.2776806 14.8575,31.2776806 C13.42851,31.2776806 12.27,30.1191812 12.27,28.6902043 L12.27,26.3902253 C12.27,24.9612484 13.42851,23.802749 14.8575,23.802749 Z M33.1425,23.802749 C34.57149,23.802749 35.73,24.9612484 35.73,26.3902253 L35.73,28.6902043 C35.73,30.1191812 34.57149,31.2776806 33.1425,31.2776806 C31.71351,31.2776806 30.555,30.1191812 30.555,28.6902043 L30.555,26.3902253 C30.555,24.9612484 31.71351,23.802749 33.1425,23.802749 Z" id="&#x5F62;&#x72B6;&#x7ED3;&#x5408;" fill="#444444" fill-rule="nonzero"></path>
-          </g>
-        </svg>
-        <div class="ai-title-text">AI摘要</div>
-        <div class="ai-tag">GPT</div>
+      <div class="ai-container">
+        <div class="ai-header">
+          <div class="ai-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="#e74c3c" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
+            </svg>
+          </div>
+          <div class="ai-title">AI智能摘要</div>
+          <div class="ai-tag">GPT</div>
+        </div>
+        <div class="ai-content">
+          <div class="ai-explanation">生成中...<span class="blinking-cursor"></span></div>
+        </div>
       </div>
-      <div class="ai-explanation">生成中...<span class="blinking-cursor"></span></div>
     `;
 
     targetElement.insertBefore(aiDiv, targetElement.firstChild);
+
+    // 添加样式
+    const style = document.createElement('style');
+    style.textContent = `
+      .post-ai {
+        font-family: 'Noto Sans SC', sans-serif;
+        margin-bottom: 20px;
+      }
+      .ai-container {
+        background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+        border: 1px solid #e8e8e8;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .ai-header {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+      }
+      .ai-icon {
+        margin-right: 10px;
+      }
+      .ai-title {
+        font-size: 18px;
+        font-weight: bold;
+        flex-grow: 1;
+      }
+      .ai-tag {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+      }
+      .ai-content {
+        padding: 20px;
+      }
+      .ai-explanation {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+      }
+      .blinking-cursor  {
+        display: inline-block;
+        width: 2px;
+        height: 20px;
+        background-color: #333;
+        animation: blink 0.7s infinite;
+        margin-left: 5px;
+      }
+      @keyframes blink {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   function removeExistingAIDiv() {
