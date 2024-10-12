@@ -15,7 +15,7 @@ function ChucklePostAI(AI_option) {
         <div class="ai-header">
           <div class="ai-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#e74c3c" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
+              <path fill="#ffffff" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
             </svg>
           </div>
           <div class="ai-title">AI智能摘要</div>
@@ -58,7 +58,7 @@ function ChucklePostAI(AI_option) {
         font-weight: bold;
         flex-grow: 1;
       }
-      .ai-tag {
+      .ai-tag { 
         background-color: rgba(255, 255, 255, 0.2);
         padding: 3px 8px;
         border-radius: 12px;
@@ -72,7 +72,7 @@ function ChucklePostAI(AI_option) {
         line-height: 1.6;
         color: #333;
       }
-      .blinking-cursor  {
+      .blinking-cursor {
         display: inline-block;
         width: 2px;
         height: 20px;
@@ -176,7 +176,7 @@ function ChucklePostAI(AI_option) {
           const currentTime = performance.now();
           const timeDiff = currentTime - lastUpdateTime;
 
-          const letter = text.slice(currentIndex, currentIndex + 1);
+          const letter = text.slice(currentIndex,  currentIndex + 1);
           const isPunctuation = /[，。！、？,.!?]/.test(letter);
           const delay = isPunctuation ? typingDelay * punctuationDelayMultiplier : typingDelay;
 
@@ -223,11 +223,30 @@ function ChucklePostAI(AI_option) {
     });
   }
 
-  if (AI_option.pjax) {
-    runChucklePostAI();
-    document.addEventListener('pjax:complete', runChucklePostAI);
+  // 使用 MutationObserver 监听 DOM 变化
+  const targetNode = document.body;
+  const config = { childList: true, subtree: true };
+
+  const callback = function(mutationsList, observer) {
+    for(let mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        const articleContainer = document.querySelector('#notion-article');
+        if (articleContainer && !document.querySelector('.post-ai')) {
+          runChucklePostAI();
+          break;
+        }
+      }
+    }
+  };
+
+  const observer = new MutationObserver(callback);
+  observer.observe(targetNode, config);
+
+  // 初始运行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runChucklePostAI);
   } else {
-    document.addEventListener("DOMContentLoaded", runChucklePostAI);
+    runChucklePostAI();
   }
 }
 
