@@ -44,7 +44,7 @@ function ChucklePostAI(AI_option) {
     getTitleAndContent: function() {
       try {
         const title = document.title;
-        const container = document.querySelector('#article-wrapper > section > #notion-article');
+        const container = document.querySelector('#article-wrapper > section');
         if (!container) {
           console.warn('ChucklePostAI：找不到文章容器。');
           return '';
