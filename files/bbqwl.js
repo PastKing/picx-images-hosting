@@ -96,11 +96,31 @@ function ChucklePostAI(AI_option) {
     }
   }
 
+  function findMainArticleContainer() {
+    const containers = document.querySelectorAll('#notion-article');
+    if (containers.length === 0) return null;
+    if (containers.length === 1) return containers[0];
+
+    // 如果有多个容器，选择内容最长的那个
+    let mainContainer = containers[0];
+    let maxLength = mainContainer.innerText.length;
+
+    for (let i = 1; i < containers.length; i++) {
+      const length = containers[i].innerText.length;
+      if (length > maxLength) {
+        maxLength = length;
+        mainContainer = containers[i];
+      }
+    }
+
+    return mainContainer;
+  }
+
   var chucklePostAI = {
     getTitleAndContent: function() {
       try {
         const title = document.title;
-        const container = document.querySelector('#notion-article[data-main-article="true"]');
+        const container = findMainArticleContainer();
         if (!container) {
           console.warn('ChucklePostAI：找不到主文章容器。');
           return '';
@@ -214,14 +234,19 @@ function ChucklePostAI(AI_option) {
 
   function runChucklePostAI() {
     if (window.location.pathname.includes('posts')) {
-      insertAIDiv('#notion-article[data-main-article="true"]');
-      const content = chucklePostAI.getTitleAndContent();
-      if (content) {
-        console.log('ChucklePostAI本次提交的内容为：' + content);
+      const mainContainer = findMainArticleContainer();
+      if (mainContainer) {
+        insertAIDiv('#' + mainContainer.id);
+        const content = chucklePostAI.getTitleAndContent();
+        if (content) {
+          console.log('ChucklePostAI本次提交的内容为：' + content);
+        }
+        chucklePostAI.fetchAISummary(content).then(summary => {
+          chucklePostAI.aiShowAnimation(summary);
+        });
+      } else {
+        console.warn('ChucklePostAI：无法找到主文章容器');
       }
-      chucklePostAI.fetchAISummary(content).then(summary => {
-        chucklePostAI.aiShowAnimation(summary);
-      });
     }
   }
 
