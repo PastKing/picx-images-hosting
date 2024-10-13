@@ -264,14 +264,14 @@ function ChucklePostAI(AI_option) {
     initChucklePostAI();
   }
 
-  // 监听URL变化
+  // 监听URL变化并自动刷新
   let lastUrl = location.href; 
   new MutationObserver(() => {
-    const url = location.href;
+  const url = location.href;
     if (url !== lastUrl) {
       lastUrl = url;
       if (window.location.pathname.includes('posts')) {
-        runChucklePostAI();
+        location.reload(); // 页面刷新
       }
     }
   }).observe(document, {subtree: true, childList: true});
