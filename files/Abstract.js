@@ -5,7 +5,7 @@ function ChucklePostAI(AI_option) {
 
   function insertAIDiv() {
     removeExistingAIDiv();
-    const targetElement = document.querySelector('#article-wrapper > section > #notion-article');
+    const targetElement = document.querySelector('#article-wrapper > section');
     if (!targetElement) return;
 
     const aiDiv = document.createElement('div');
